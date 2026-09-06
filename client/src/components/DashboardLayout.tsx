@@ -1,0 +1,12 @@
+import { BellRing, ChevronDown, CircleUserRound, FileBarChart2, LocateFixed, LogOut, Map, MapPinned, TicketCheck, Wrench } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { GovEmblem, TnebLogo } from "@/components/Logos";
+
+const govMark = "/gov-logo.png";
+const tnebMark = "/tneb-logo.png";
+const nav = [{ href: "/", label: "City operations", icon: Map }, { href: "/zones", label: "Zone monitoring", icon: MapPinned }, { href: "/transformers", label: "Transformer monitor", icon: LocateFixed }, { href: "/tickets", label: "Ticket desk", icon: TicketCheck }, { href: "/assignments", label: "Assignment board", icon: Wrench }, { href: "/alerts", label: "Alert centre", icon: BellRing, count: "6" }, { href: "/load-analysis", label: "Load analysis", icon: FileBarChart2 }];
+
+export default function DashboardLayout({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
+  const [location] = useLocation();
+  return <div className="light-shell"><aside className="control-sidebar"><div className="identity-block"><div className="identity-seal"><GovEmblem src={govMark} /></div><div><span>Government of Tamil Nadu</span><strong>Tamil Nadu Electricity Board</strong></div></div><div className="product-lockup"><div className="w-9 h-9 rounded-full bg-white p-0.5 overflow-hidden flex-shrink-0 flex items-center justify-center"><TnebLogo src={tnebMark} /></div><div><strong>Transformer Health Command</strong><span>Government control room</span></div></div><nav>{nav.map((item) => { const Icon = item.icon; const active = item.href === "/" ? location === "/" : location.startsWith(item.href); return <Link key={item.href} href={item.href} className={`control-nav ${active ? "active" : ""}`}><Icon size={17} /><span>{item.label}</span>{item.count && <b>{item.count}</b>}</Link>; })}</nav><div className="sidebar-note sidebar-disclaimer">Educational Purpose Only</div></aside><main className="control-main"><header className="control-header"><div><span>{eyebrow}</span><h1>{title}</h1></div><div className="header-actions"><button className="notification-control" aria-label="Open notices"><BellRing size={18} /><i /></button><div className="public-mode-badge"><span className="public-mode-dot" /><div><strong>Public demonstration</strong><small>Educational viewing mode</small></div></div></div></header><section className="public-ribbon"><span className="ribbon-state" /> <strong>Viewing mode</strong><i /> Public educational demonstration</section><div className="control-content">{children}</div></main></div>;
+}
