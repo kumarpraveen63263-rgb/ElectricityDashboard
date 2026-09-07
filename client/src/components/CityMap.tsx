@@ -172,7 +172,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
 
         {/* Radar Sweep Circle Overlay centered at AVD-TX-027 */}
         <Circle
-          center={[13.1118, 80.0969]}
+          center={[13.0620, 80.0975]}
           radius={500}
           pathOptions={{ color: "#00FF66", weight: 1.5, dashArray: "4 4", fillColor: "#00FF66", fillOpacity: 0.08 }}
         />

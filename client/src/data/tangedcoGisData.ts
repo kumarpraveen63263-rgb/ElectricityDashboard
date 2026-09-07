@@ -48,7 +48,7 @@ export const collegeAsset: CollegeAsset = {
   id: "SAEC-AVD",
   name: "S.A. Engineering College (SAEC)",
   code: "SAEC-CAMPUS",
-  position: { lat: 13.1162, lng: 80.0982 },
+  position: { lat: 13.0612, lng: 80.0988 },
   connectedTx: "AVD-TX-027",
   category: "Higher Education Campus / High-Load Consumer",
   demandKva: "650 kVA Peak",
@@ -83,9 +83,10 @@ export const feederLines: FeederLine[] = [
     status: "live_mqtt",
     path: [
       [13.1215, 80.0935], // Avadi 110kV Substation
-      [13.1180, 80.0950],
-      [13.1118, 80.0969], // AVD-TX-027 Transformer
-      [13.1162, 80.0982], // S.A. Engineering College
+      [13.0980, 80.0940],
+      [13.0750, 80.0960],
+      [13.0620, 80.0975], // AVD-TX-027 Transformer
+      [13.0612, 80.0988], // S.A. Engineering College
     ],
   },
   {
