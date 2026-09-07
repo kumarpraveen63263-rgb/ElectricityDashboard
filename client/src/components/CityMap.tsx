@@ -143,21 +143,21 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
         zoomControl
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | TANGEDCO Smart Grid Control Room'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | TANGEDCO Smart Grid'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <FitScope zoneId={zoneId} cityId={cityId} selectedId={selectedId} />
 
-        {/* Operational Zone Polygons (Government SCADA Boundaries) */}
+        {/* Operational Zone Polygons */}
         {activeZones.map((zone) => (
           <Polygon
             key={zone.id}
             positions={zone.boundary.map(asPoint)}
-            pathOptions={{ color: "#00E5FF", weight: 1.5, dashArray: "6 4", fillColor: "#00E5FF", fillOpacity: 0.06 }}
+            pathOptions={{ color: "#1e5874", weight: 2, fillColor: "#5db4c3", fillOpacity: 0.12 }}
           >
             <Tooltip sticky direction="center" className="zone-tooltip">
-              {zone.name.toUpperCase()} ZONE CONTROL BOUNDARY
+              {zone.name.toUpperCase()} ZONE
             </Tooltip>
           </Polygon>
         ))}
@@ -168,7 +168,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
             key={`${zone.id}-coverage`}
             center={asPoint(zone.center)}
             radius={zone.cityId === "coimbatore" ? 2500 : zone.id === "avadi" ? 3200 : 3800}
-            pathOptions={{ color: "#D7A445", weight: 1, dashArray: "5 5", fillColor: "#D7A445", fillOpacity: 0.02 }}
+            pathOptions={{ color: "#c49538", weight: 1, dashArray: "5 5", fillColor: "#dfb85d", fillOpacity: 0.04 }}
           />
         ))}
 
@@ -176,7 +176,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
         <Circle
           center={[13.0620, 80.0975]}
           radius={500}
-          pathOptions={{ color: "#00FF66", weight: 1.5, dashArray: "3 3", fillColor: "#00FF66", fillOpacity: 0.04 }}
+          pathOptions={{ color: "#00FF66", weight: 1.5, dashArray: "4 4", fillColor: "#00FF66", fillOpacity: 0.08 }}
         />
 
         {/* Animated Power-Flow Feeder Lines */}
