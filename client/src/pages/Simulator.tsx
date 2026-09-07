@@ -24,7 +24,7 @@ import FaultCompass, { type RegionData, type RegionTone } from "@/components/Fau
 
 type DiagnosticState = "Normal" | "Watch" | "Warning" | "Critical";
 
-const baseline = { load: 63, temp: 68, voltage: 415, pf: 0.93, connected: true };
+const baseline = { load: 63, temp: 0, voltage: 415, pf: 0.93, connected: true };
 
 function toneFromState(state: DiagnosticState): RegionTone {
   if (state === "Critical") return "coral";
@@ -69,10 +69,10 @@ export default function Simulator() {
   }, [connected, load, pf, temp, voltage]);
 
   const setScenario = (scenario: "nominal" | "thermal" | "pf" | "critical") => {
-    if (scenario === "nominal") { setLoad(63); setTemp(68); setVoltage(415); setPf(0.93); setConnected(true); setNotice("Nominal baseline restored. All diagnosis regions are within their normal operating bands."); }
-    if (scenario === "thermal") { setLoad(89); setTemp(91); setVoltage(412); setPf(0.92); setConnected(true); setNotice("Thermal drill injected. Observe the elevated core temperature and the suggested solar-support response."); }
-    if (scenario === "pf") { setLoad(72); setTemp(73); setVoltage(404); setPf(0.84); setConnected(true); setNotice("Power-factor drill injected. The decision engine should recommend a SOLAR + GRID operating mode."); }
-    if (scenario === "critical") { setLoad(106); setTemp(102); setVoltage(369); setPf(0.71); setConnected(false); setNotice("Critical compound fault injected. Review the action ledger before acknowledging the simulated event."); }
+    if (scenario === "nominal") { setLoad(63); setTemp(0); setVoltage(415); setPf(0.93); setConnected(true); setNotice("Nominal baseline restored. All diagnosis regions are within their normal operating bands."); }
+    if (scenario === "thermal") { setLoad(89); setTemp(0); setVoltage(412); setPf(0.92); setConnected(true); setNotice("Thermal drill injected. Core temperature fixed at 0 °C for presentation."); }
+    if (scenario === "pf") { setLoad(72); setTemp(0); setVoltage(404); setPf(0.84); setConnected(true); setNotice("Power-factor drill injected. The decision engine should recommend a SOLAR + GRID operating mode."); }
+    if (scenario === "critical") { setLoad(106); setTemp(0); setVoltage(369); setPf(0.71); setConnected(false); setNotice("Critical compound fault injected. Review the action ledger before acknowledging the simulated event."); }
   };
 
   return <DashboardShell eyebrow="TNEB / TRAINING SIMULATION / REGION ENGINE" title="Fault Diagnosis Simulator">
@@ -81,7 +81,7 @@ export default function Simulator() {
     <section className="sim-layout">
       <article className="panel controls-panel"><div className="card-heading"><div><span className="eyebrow">Step 01 · establish condition</span><h2>Simulated telemetry</h2></div><button className="ghost-icon" aria-label="Reset simulation" onClick={() => setScenario("nominal")}><RotateCcw size={17} /></button></div>
         <SliderControl label="Transformer load" value={load} unit="%" min={40} max={115} step={1} onChange={setLoad} icon={Gauge} tone="load" />
-        <SliderControl label="Core temperature" value={temp} unit="°C" min={45} max={110} step={1} onChange={setTemp} icon={ThermometerSun} tone="thermal" />
+        <SliderControl label="Core temperature" value={temp} unit="°C" min={0} max={110} step={1} onChange={setTemp} icon={ThermometerSun} tone="thermal" />
         <SliderControl label="Line voltage" value={voltage} unit=" V" min={360} max={465} step={1} onChange={setVoltage} icon={Zap} tone="electrical" />
         <SliderControl label="Power factor" value={pf} unit="" min={0.7} max={1} step={0.01} onChange={setPf} icon={Activity} tone="power" />
         <button className={`connection-toggle ${connected ? "on" : "off"}`} onClick={() => { setConnected(!connected); setNotice(connected ? "Telemetry heartbeat interrupted for this training scenario." : "Telemetry heartbeat restored. The communication region will re-evaluate on the next sweep."); }}><span><CloudSun size={17} />MQTT relay heartbeat</span><strong>{connected ? "CONNECTED" : "OFFLINE"}</strong></button>

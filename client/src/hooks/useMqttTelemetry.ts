@@ -36,7 +36,7 @@ const defaultState: MqttState = {
     power: 3004.8,
     apparentPower: 3266.0,
     load: 84.0,
-    temperature: 81.4,
+    temperature: 0.0,
     powerFactor: 0.92,
     status: "ONLINE",
     heartbeat: 0.5,

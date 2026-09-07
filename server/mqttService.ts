@@ -31,7 +31,7 @@ class MqttTelemetryManager extends EventEmitter {
     power: 3004.8,
     apparentPower: 3266.0,
     load: 84.0,
-    temperature: 81.4,
+    temperature: 0.0,
     powerFactor: 0.92,
     status: "ONLINE",
     heartbeat: 0.5,
@@ -178,8 +178,8 @@ class MqttTelemetryManager extends EventEmitter {
       load = Number((Math.min(100, (i / 20.0) * 100)).toFixed(1));
     }
 
-    // Auto-calculate core temp based on current/load
-    const temp = Number((65.0 + (load / 100) * 20.0).toFixed(1));
+    // Temperature set to 0.0 per presentation requirement
+    const temp = 0.0;
 
     this.updateTelemetry({
       voltage: Number(v.toFixed(1)),
@@ -188,7 +188,7 @@ class MqttTelemetryManager extends EventEmitter {
       apparentPower: Number(s.toFixed(1)),
       powerFactor: Number(pf.toFixed(2)),
       load,
-      temperature: temp,
+      temperature: 0.0,
       status,
       lastTopic: topic,
       source: "ESP32_PHYSICAL_HARDWARE",
@@ -216,6 +216,7 @@ class MqttTelemetryManager extends EventEmitter {
         apparentPower: newS,
         load: Math.min(99, Math.max(50, newLoad)),
         powerFactor: newPf,
+        temperature: 0.0,
         heartbeat: Number((0.4 + Math.random() * 0.3).toFixed(1)),
         source: this.currentPayload.source,
       });
@@ -230,7 +231,7 @@ class MqttTelemetryManager extends EventEmitter {
       power: data.power ?? this.currentPayload.power,
       apparentPower: data.apparentPower ?? this.currentPayload.apparentPower,
       load: data.load ?? this.currentPayload.load,
-      temperature: data.temperature ?? this.currentPayload.temperature,
+      temperature: 0.0,
       powerFactor: data.powerFactor ?? this.currentPayload.powerFactor,
       status: data.status ?? this.currentPayload.status,
       heartbeat: data.heartbeat ?? this.currentPayload.heartbeat,
