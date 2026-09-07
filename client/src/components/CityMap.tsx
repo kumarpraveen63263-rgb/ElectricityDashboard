@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Circle, MapContainer, Marker, Polyline, Polygon, Popup, TileLayer, Tooltip, useMap } from "react-leaflet";
 import L from "leaflet";
+import { ChevronDown, ChevronUp, Layers } from "lucide-react";
 import { cityZones, getCity, getZone, transformers, type Transformer, type Zone } from "@/data/controlRoomData";
 import { collegeAsset, ebOffices, feederLines, substations } from "@/data/tangedcoGisData";
 import { useMqttTelemetry } from "@/hooks/useMqttTelemetry";
@@ -125,6 +126,7 @@ type Props = {
 };
 
 export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSelect, className }: Props) {
+  const [isLegendOpen, setIsLegendOpen] = useState(false);
   const activeZones = useMemo(() => (zoneId ? [getZone(zoneId)] : cityZones(cityId)), [zoneId, cityId]);
   const visibleZoneIds = new Set(activeZones.map((zone) => zone.id));
   const visibleTransformers = transformers.filter((asset) => visibleZoneIds.has(asset.zoneId));
@@ -395,47 +397,71 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
         })}
       </MapContainer>
 
-      {/* Floating Control Room Legend Overlay */}
-      <div className="tangedco-gis-legend">
-        <div className="legend-header">
-          <span>TANGEDCO GIS LEGEND</span>
-          <span className="text-[9px] text-emerald-400 font-mono">LIVE 11kV</span>
+      {/* Clickable Floating Control Room Legend Overlay */}
+      {!isLegendOpen ? (
+        <button
+          type="button"
+          onClick={() => setIsLegendOpen(true)}
+          className="tangedco-gis-legend-toggle"
+          title="Click to view TANGEDCO GIS Legend"
+        >
+          <Layers className="w-3.5 h-3.5 text-[#d7a445]" />
+          <span className="font-mono text-xs font-bold text-[#d7a445] tracking-wider uppercase">GIS LEGEND</span>
+          <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/80 border border-emerald-500/30 px-1.5 py-0.5 rounded">LIVE 11kV</span>
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-0.5" />
+        </button>
+      ) : (
+        <div className="tangedco-gis-legend">
+          <div
+            className="legend-header cursor-pointer select-none flex items-center justify-between"
+            onClick={() => setIsLegendOpen(false)}
+            title="Click to collapse Legend"
+          >
+            <div className="flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-[#d7a445]" />
+              <span>TANGEDCO GIS LEGEND</span>
+              <span className="text-[9px] text-emerald-400 font-mono">LIVE 11kV</span>
+            </div>
+            <span className="text-slate-400 hover:text-white transition-colors">
+              <ChevronUp className="w-3.5 h-3.5" />
+            </span>
+          </div>
+          <div className="legend-grid">
+            <div className="legend-item">
+              <div className="icon-box bg-[#00FF66] text-slate-950 font-bold">027</div>
+              <span>Selected Tx (AVD-TX-027 Neon)</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#2d8a74] text-white">●</div>
+              <span>Healthy Transformer</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#d18b18] text-white">●</div>
+              <span>Watch / High Load</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#c34c38] text-white">▲</div>
+              <span>Fault Exception</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#0f172a] text-[#c084fc] border border-purple-500">⚡</div>
+              <span>Substation (110/33kV Grid)</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#0f172a] text-[#fb923c] border border-orange-500">🏢</div>
+              <span>EB O&M Office (TANGEDCO)</span>
+            </div>
+            <div className="legend-item">
+              <div className="icon-box bg-[#0f172a] text-[#60a5fa] border border-blue-500">🎓</div>
+              <span>Educational Inst. (SAEC)</span>
+            </div>
+            <div className="legend-item">
+              <div className="w-4 h-1 bg-[#00FF66] shadow-[0_0_6px_#00FF66]"></div>
+              <span>Animated 11kV Feeder Line</span>
+            </div>
+          </div>
         </div>
-        <div className="legend-grid">
-          <div className="legend-item">
-            <div className="icon-box bg-[#00FF66] text-slate-950 font-bold">027</div>
-            <span>Selected Tx (AVD-TX-027 Neon)</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#2d8a74] text-white">●</div>
-            <span>Healthy Transformer</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#d18b18] text-white">●</div>
-            <span>Watch / High Load</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#c34c38] text-white">▲</div>
-            <span>Fault Exception</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#0f172a] text-[#c084fc] border border-purple-500">⚡</div>
-            <span>Substation (110/33kV Grid)</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#0f172a] text-[#fb923c] border border-orange-500">🏢</div>
-            <span>EB O&M Office (TANGEDCO)</span>
-          </div>
-          <div className="legend-item">
-            <div className="icon-box bg-[#0f172a] text-[#60a5fa] border border-blue-500">🎓</div>
-            <span>Educational Inst. (SAEC)</span>
-          </div>
-          <div className="legend-item">
-            <div className="w-4 h-1 bg-[#00FF66] shadow-[0_0_6px_#00FF66]"></div>
-            <span>Animated 11kV Feeder Line</span>
-          </div>
-        </div>
-      </div>
+      )}
 
       <div className="map-caption">
         OpenStreetMap GIS base · TANGEDCO / TANTRANSCO Smart Grid Control Room Overlay

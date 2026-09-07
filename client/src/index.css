@@ -202,7 +202,31 @@
   cursor: pointer;
 }
 
-/* Floating Control Room Legend Overlay */
+/* Floating Control Room Legend Overlay & Toggle */
+.tangedco-gis-legend-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1000;
+  background: rgba(10, 26, 47, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(215, 164, 69, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease-in-out;
+}
+.tangedco-gis-legend-toggle:hover {
+  background: rgba(15, 36, 64, 0.98);
+  border-color: rgba(215, 164, 69, 0.8);
+  box-shadow: 0 0 12px rgba(215, 164, 69, 0.3);
+}
+
 .tangedco-gis-legend {
   position: absolute;
   top: 14px;
