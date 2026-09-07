@@ -155,3 +155,64 @@ export async function acknowledgeScopedAlert(input: { user: { id: number; role: 
   await db.insert(auditEvents).values({ actorUserId: input.user.id, entityType: "alert", entityId: String(input.alertId), action: "acknowledged", detail: `Acknowledged alert ${input.alertId}.` });
   return { success: true } as const;
 }
+
+export async function getTechnicianTickets(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const assignedTickets = await db.select().from(tickets).where(eq(tickets.assignedToUserId, userId));
+  const [allTransformers, allZones] = await Promise.all([
+    db.select().from(transformers),
+    db.select().from(zones),
+  ]);
+  const transformerMap = new Map(allTransformers.map((t) => [t.id, t]));
+  const zoneMap = new Map(allZones.map((z) => [z.id, z]));
+
+  return assignedTickets.map((ticket) => {
+    const t = transformerMap.get(ticket.transformerId);
+    const z = t ? zoneMap.get(t.zoneId) : null;
+    return {
+      ...ticket,
+      transformerName: t?.name ?? "Unknown Transformer",
+      transformerCode: t?.assetCode ?? "N/A",
+      latitude: t?.latitude ?? 13.0827,
+      longitude: t?.longitude ?? 80.2707,
+      zoneName: z?.name ?? "Zone",
+    };
+  });
+}
+
+export async function updateTechnicianTicketStatus(input: {
+  userId: number;
+  ticketId: number;
+  status: "open" | "assigned" | "in_progress" | "resolved" | "closed";
+  note: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Operational database is unavailable");
+  const ticketList = await db.select().from(tickets).where(eq(tickets.id, input.ticketId)).limit(1);
+  if (ticketList.length === 0) throw new Error("Ticket not found");
+
+  const updates: Record<string, any> = { status: input.status };
+  if (input.status === "resolved") {
+    updates.resolvedAt = new Date();
+  }
+
+  await db.update(tickets).set(updates).where(eq(tickets.id, input.ticketId));
+  await db.insert(ticketUpdates).values({
+    ticketId: input.ticketId,
+    authorUserId: input.userId,
+    status: input.status,
+    note: input.note,
+  });
+
+  await db.insert(auditEvents).values({
+    actorUserId: input.userId,
+    entityType: "ticket",
+    entityId: String(input.ticketId),
+    action: `status_update_${input.status}`,
+    detail: `Technician updated status to ${input.status}: ${input.note}`,
+  });
+
+  return { success: true } as const;
+}
+
