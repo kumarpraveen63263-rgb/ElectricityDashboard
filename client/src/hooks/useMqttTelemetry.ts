@@ -3,43 +3,62 @@ import { useEffect, useState } from "react";
 export type TelemetryPayload = {
   transformerId: string;
   voltage: number;
+  current: number;
+  power: number;
+  apparentPower: number;
   load: number;
   temperature: number;
   powerFactor: number;
+  status: string;
   heartbeat: number;
   lat?: number;
   lng?: number;
   timestamp: string;
   packetCount: number;
-  source: "MQTT_PHYSICAL_HARDWARE" | "SIMULATED_TEST";
+  source: "ESP32_PHYSICAL_HARDWARE" | "MQTT_BROKER" | "SIMULATED_TEST";
+  lastTopic?: string;
 };
 
 export type MqttState = {
   payload: TelemetryPayload;
   history: TelemetryPayload[];
   brokerUrl: string;
-  topic: string;
-  isConnected: boolean;
+  esp32Client: string;
+  topics: string[];
+  esp32Connected: boolean;
 };
 
 const defaultState: MqttState = {
   payload: {
     transformerId: "AVD-TX-027",
-    voltage: 410.2,
+    voltage: 230.4,
+    current: 14.2,
+    power: 3004.8,
+    apparentPower: 3266.0,
     load: 84.0,
     temperature: 81.4,
-    powerFactor: 0.91,
-    heartbeat: 0.6,
+    powerFactor: 0.92,
+    status: "ONLINE",
+    heartbeat: 0.5,
     lat: 13.1118,
     lng: 80.0969,
     timestamp: "10:41:52 IST",
     packetCount: 1,
-    source: "MQTT_PHYSICAL_HARDWARE",
+    source: "ESP32_PHYSICAL_HARDWARE",
+    lastTopic: "PowerHouse/Energy/Voltage",
   },
   history: [],
-  brokerUrl: "wss://broker.hivemq.com:8884/mqtt",
-  topic: "tneb/avadi/AVD-TX-027/telemetry",
-  isConnected: true,
+  brokerUrl: "mqtt://192.168.137.1:1883",
+  esp32Client: "PowerHouse_EnergyMeter",
+  topics: [
+    "PowerHouse/Energy/Voltage",
+    "PowerHouse/Energy/Current",
+    "PowerHouse/Energy/Power",
+    "PowerHouse/Energy/ApparentPower",
+    "PowerHouse/Energy/PowerFactor",
+    "PowerHouse/Energy/Status",
+  ],
+  esp32Connected: true,
 };
 
 export function useMqttTelemetry() {

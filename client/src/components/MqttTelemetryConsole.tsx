@@ -3,29 +3,38 @@ import { Activity, CheckCircle2, Cpu, Gauge, Radio, RefreshCw, Send, Signal, The
 import { useMqttTelemetry } from "@/hooks/useMqttTelemetry";
 
 export default function MqttTelemetryConsole() {
-  const { payload, history, brokerUrl, topic, isConnected, sendPayload } = useMqttTelemetry();
-  const [customVoltage, setCustomVoltage] = useState("414.5");
-  const [customLoad, setCustomLoad] = useState("86.2");
-  const [customTemp, setCustomTemp] = useState("83.1");
+  const { payload, brokerUrl, esp32Client, topics, sendPayload } = useMqttTelemetry();
+  const [customVoltage, setCustomVoltage] = useState("230.4");
+  const [customCurrent, setCustomCurrent] = useState("14.2");
+  const [customPower, setCustomPower] = useState("3004.8");
   const [customPf, setCustomPf] = useState("0.92");
   const [sending, setSending] = useState(false);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
+    const v = parseFloat(customVoltage);
+    const i = parseFloat(customCurrent);
+    const pf = parseFloat(customPf);
+    const p = parseFloat(customPower) || v * i * pf;
+    const s = v * i;
+
     await sendPayload({
-      voltage: parseFloat(customVoltage),
-      load: parseFloat(customLoad),
-      temperature: parseFloat(customTemp),
-      powerFactor: parseFloat(customPf),
-      source: "MQTT_PHYSICAL_HARDWARE",
+      voltage: v,
+      current: i,
+      power: p,
+      apparentPower: s,
+      powerFactor: pf,
+      load: Number(((p / (s || 1)) * 90.0).toFixed(1)),
+      temperature: Number((65.0 + ((p / (s || 1)) * 90.0 / 100) * 20.0).toFixed(1)),
+      source: "ESP32_PHYSICAL_HARDWARE",
     });
     setSending(false);
   };
 
   return (
     <div className="bg-[#0A1A2F] text-slate-100 rounded-xl p-5 border border-emerald-500/40 shadow-xl space-y-5">
-      {/* Console Header with Live Pulse */}
+      {/* Console Header with ESP32 Live Pulse */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-4 stroke-slate-700/50 border-b border-slate-700/60">
         <div className="flex items-center space-x-3">
           <div className="relative flex items-center justify-center">
@@ -35,18 +44,18 @@ export default function MqttTelemetryConsole() {
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
-                LIVE HARDWARE MQTT SIGNAL
+                ESP32 HARDWARE MQTT ACTIVE
               </span>
-              <span className="text-xs text-slate-400 font-mono">AVD-TX-027</span>
+              <span className="text-xs text-slate-400 font-mono">Client: {esp32Client}</span>
             </div>
-            <h3 className="text-lg font-bold text-white mt-0.5">Poonamallee Road 027 Sensor Node</h3>
+            <h3 className="text-lg font-bold text-white mt-0.5">AVD-TX-027 · Poonamallee Road Physical Energy Meter</h3>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4 text-xs font-mono text-slate-300">
+        <div className="flex items-center space-x-3 text-xs font-mono">
           <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/60 flex items-center space-x-2">
             <Signal className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Broker: <strong className="text-emerald-300">{brokerUrl.split("://")[1]}</strong></span>
+            <span>Broker: <strong className="text-emerald-300">{brokerUrl}</strong></span>
           </div>
           <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/60 flex items-center space-x-2">
             <Radio className="w-3.5 h-3.5 text-amber-400" />
@@ -55,7 +64,7 @@ export default function MqttTelemetryConsole() {
         </div>
       </div>
 
-      {/* Main Realtime Telemetry Grid */}
+      {/* Main Realtime Telemetry Grid from ESP32 */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Voltage */}
         <div className="bg-slate-900/70 p-4 rounded-lg border border-slate-800 flex items-center space-x-3">
@@ -63,33 +72,33 @@ export default function MqttTelemetryConsole() {
             <Zap className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block font-medium">Voltage (Phase A-B)</span>
+            <span className="text-xs text-slate-400 block font-medium">Voltage (PowerHouse/Energy/Voltage)</span>
             <strong className="text-xl font-bold font-mono text-sky-300">{payload.voltage} V</strong>
-            <span className="text-[10px] text-slate-500 block">Target: 415 V ±5%</span>
+            <span className="text-[10px] text-slate-500 block">Single Phase / Feeder</span>
           </div>
         </div>
 
-        {/* Load */}
+        {/* Current */}
         <div className="bg-slate-900/70 p-4 rounded-lg border border-slate-800 flex items-center space-x-3">
           <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400">
             <Gauge className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block font-medium">Transformer Load</span>
-            <strong className="text-xl font-bold font-mono text-amber-300">{payload.load}%</strong>
-            <span className="text-[10px] text-amber-400/80 block">Review Band (&gt;80%)</span>
+            <span className="text-xs text-slate-400 block font-medium">Current (PowerHouse/Energy/Current)</span>
+            <strong className="text-xl font-bold font-mono text-amber-300">{payload.current ?? 14.2} A</strong>
+            <span className="text-[10px] text-amber-400/80 block">Load: {payload.load}%</span>
           </div>
         </div>
 
-        {/* Temperature */}
+        {/* Active Power */}
         <div className="bg-slate-900/70 p-4 rounded-lg border border-slate-800 flex items-center space-x-3">
           <div className="p-2.5 rounded-lg bg-rose-500/10 text-rose-400">
             <Thermometer className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block font-medium">Oil/Core Temp</span>
-            <strong className="text-xl font-bold font-mono text-rose-300">{payload.temperature}°C</strong>
-            <span className="text-[10px] text-rose-400/80 block">Thermal Sensor Node</span>
+            <span className="text-xs text-slate-400 block font-medium">Active Power (PowerHouse/Energy/Power)</span>
+            <strong className="text-xl font-bold font-mono text-rose-300">{payload.power ?? 3004.8} W</strong>
+            <span className="text-[10px] text-rose-400/80 block">Temp: {payload.temperature}°C</span>
           </div>
         </div>
 
@@ -99,61 +108,48 @@ export default function MqttTelemetryConsole() {
             <Activity className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block font-medium">Power Factor (PF)</span>
+            <span className="text-xs text-slate-400 block font-medium">Power Factor (PowerHouse/Energy/PowerFactor)</span>
             <strong className="text-xl font-bold font-mono text-emerald-300">{payload.powerFactor}</strong>
-            <span className="text-[10px] text-emerald-400/80 block">Optimal (&gt;0.90)</span>
+            <span className="text-[10px] text-emerald-400/80 block">Status: {payload.status || "ONLINE"}</span>
           </div>
         </div>
       </div>
 
-      {/* Lower Section: Topic Details & Payload Injection */}
+      {/* Topics List & Test Injection Form */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-        {/* Live MQTT JSON Telemetry Stream */}
+        {/* ESP32 MQTT Subscribed Topics */}
         <div className="bg-slate-900/90 rounded-lg p-4 border border-slate-800 space-y-2 font-mono text-xs">
           <div className="flex items-center justify-between text-slate-400 pb-1 border-b border-slate-800">
             <span className="flex items-center space-x-1.5">
               <Cpu className="w-4 h-4 text-emerald-400" />
-              <strong className="text-slate-200">MQTT Topic:</strong> {topic}
+              <strong className="text-slate-200">ESP32 Subscribed MQTT Topics:</strong>
             </span>
             <span className="text-[11px] text-emerald-400 flex items-center space-x-1">
               <CheckCircle2 className="w-3 h-3" />
-              <span>Receiving</span>
+              <span>Listening on 1883</span>
             </span>
           </div>
-          <pre className="text-emerald-300/90 bg-slate-950 p-3 rounded overflow-x-auto text-[11px] leading-relaxed">
-{JSON.stringify(
-  {
-    asset_id: payload.transformerId,
-    voltage_v: payload.voltage,
-    load_pct: payload.load,
-    core_temp_c: payload.temperature,
-    power_factor: payload.powerFactor,
-    heartbeat_sec: payload.heartbeat,
-    location: { lat: payload.lat, lng: payload.lng },
-    last_pkt: payload.timestamp,
-    packet_seq: payload.packetCount,
-    source: payload.source,
-  },
-  null,
-  2
-)}
-          </pre>
+          <div className="space-y-1 pt-1">
+            {topics.map((tp) => (
+              <div key={tp} className="flex items-center justify-between bg-slate-950 px-2.5 py-1 rounded text-[11px]">
+                <code className="text-sky-300">{tp}</code>
+                <span className="text-[10px] text-emerald-400">Active</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Live Packet Ingestion & Test Controls */}
+        {/* Live ESP32 Topic Injector / Test Console */}
         <form onSubmit={handleSend} className="bg-slate-900/90 rounded-lg p-4 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between text-slate-200 pb-1 border-b border-slate-800">
             <span className="font-semibold text-xs flex items-center space-x-2">
               <Send className="w-3.5 h-3.5 text-sky-400" />
-              <span>Live MQTT Telemetry Injector / Hardware Simulator</span>
+              <span>ESP32 Hardware Test Injector</span>
             </span>
           </div>
-          <p className="text-[11px] text-slate-400">
-            Publish custom physical sensor values to topic <code className="text-sky-300">{topic}</code>:
-          </p>
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div>
-              <label className="block text-slate-400 mb-1">Voltage (V)</label>
+              <label className="block text-slate-400 mb-1">Voltage (PowerHouse/Energy/Voltage)</label>
               <input
                 type="number"
                 step="0.1"
@@ -163,27 +159,27 @@ export default function MqttTelemetryConsole() {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Load (%)</label>
+              <label className="block text-slate-400 mb-1">Current (PowerHouse/Energy/Current)</label>
               <input
                 type="number"
                 step="0.1"
-                value={customLoad}
-                onChange={(e) => setCustomLoad(e.target.value)}
+                value={customCurrent}
+                onChange={(e) => setCustomCurrent(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Temperature (°C)</label>
+              <label className="block text-slate-400 mb-1">Power (PowerHouse/Energy/Power)</label>
               <input
                 type="number"
                 step="0.1"
-                value={customTemp}
-                onChange={(e) => setCustomTemp(e.target.value)}
+                value={customPower}
+                onChange={(e) => setCustomPower(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Power Factor</label>
+              <label className="block text-slate-400 mb-1">Power Factor (PowerHouse/Energy/PowerFactor)</label>
               <input
                 type="number"
                 step="0.01"
@@ -199,7 +195,7 @@ export default function MqttTelemetryConsole() {
             className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded text-xs transition flex items-center justify-center space-x-2"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${sending ? "animate-spin" : ""}`} />
-            <span>{sending ? "Publishing to MQTT..." : "Publish Live MQTT Packet Now"}</span>
+            <span>{sending ? "Publishing to ESP32 Topics..." : "Publish Test ESP32 Topic Packets"}</span>
           </button>
         </form>
       </div>
