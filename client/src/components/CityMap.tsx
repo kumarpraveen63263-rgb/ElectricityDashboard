@@ -7,7 +7,13 @@ const stateColours = { healthy: "#2d8a74", watch: "#d18b18", fault: "#c34c38", o
 const asPoint = (point: google.maps.LatLngLiteral): [number, number] => [point.lat, point.lng];
 
 function markerIcon(asset: Transformer, selected: boolean) {
-  return L.divIcon({ className: "leaflet-asset-icon", iconSize: [selected ? 37 : 31, selected ? 37 : 31], iconAnchor: [selected ? 18 : 15, selected ? 18 : 15], html: `<span class="leaflet-asset-dot ${asset.state} ${selected ? "selected" : ""}" style="--asset-colour:${stateColours[asset.state]}"><b>${asset.id.replace(/.*-/, "")}</b></span>` });
+  const isMqttLive = asset.id === "AVD-TX-027";
+  return L.divIcon({
+    className: "leaflet-asset-icon",
+    iconSize: [selected ? 37 : 31, selected ? 37 : 31],
+    iconAnchor: [selected ? 18 : 15, selected ? 18 : 15],
+    html: `<span class="leaflet-asset-dot ${asset.state} ${selected ? "selected" : ""} ${isMqttLive ? "mqtt-live-beacon" : ""}" style="--asset-colour:${isMqttLive ? "#10b981" : stateColours[asset.state]}"><b>${asset.id.replace(/.*-/, "")}</b>${isMqttLive ? '<i class="mqtt-pulse-ring"></i>' : ""}</span>`
+  });
 }
 
 function FitScope({ zoneId, cityId }: { zoneId?: Zone["id"]; cityId?: string }) {

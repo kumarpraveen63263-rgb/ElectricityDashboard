@@ -28,6 +28,8 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
+import { mqttManager } from "../mqttService";
+
 async function startServer() {
   const app = express();
   const server = createServer(app);
@@ -36,6 +38,38 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+
+  // Live MQTT Telemetry REST & SSE Stream for AVD-TX-027
+  app.get("/api/telemetry/AVD-TX-027", (_req, res) => {
+    res.json(mqttManager.getTelemetry());
+  });
+
+  app.post("/api/telemetry/AVD-TX-027", (req, res) => {
+    mqttManager.publishTelemetry(req.body);
+    res.json({ success: true, updated: mqttManager.getTelemetry().payload });
+  });
+
+  app.get("/api/telemetry/stream", (req, res) => {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const sendData = (payload: any) => {
+      res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    };
+
+    sendData(mqttManager.getTelemetry());
+
+    const listener = () => {
+      sendData(mqttManager.getTelemetry());
+    };
+
+    mqttManager.on("telemetry", listener);
+
+    req.on("close", () => {
+      mqttManager.off("telemetry", listener);
+    });
+  });
   // tRPC API
   app.use(
     "/api/trpc",
@@ -45,7 +79,7 @@ async function startServer() {
     })
   );
   // development mode uses Vite, production mode uses static files
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV !== "production") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
