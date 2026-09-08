@@ -27,7 +27,7 @@ class MqttTelemetryManager extends EventEmitter {
   private currentPayload: MqttTelemetryPayload = {
     transformerId: "AVD-TX-027",
     voltage: 230.4,
-    current: 14.2,
+    current: 546.3,
     power: 3004.8,
     apparentPower: 3266.0,
     load: 84.0,

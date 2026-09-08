@@ -85,8 +85,8 @@ export default function MqttTelemetryConsole() {
           </div>
           <div>
             <span className="text-xs text-slate-500 block font-medium">Current (PowerHouse/Energy/Current)</span>
-            <strong className="text-xl font-bold font-mono text-[#b45309]">{payload.current ?? 14.2} A</strong>
-            <span className="text-[10px] text-amber-700 font-medium block">Load: {payload.load}%</span>
+            <strong className="text-xl font-bold font-mono text-[#b45309]">{payload.current ?? 546.3} mA</strong>
+            <span className="text-[10px] text-amber-700 font-medium block">Load: {payload.load}% (No Device)</span>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ export default function MqttTelemetryConsole() {
               />
             </div>
             <div>
-              <label className="block text-slate-600 mb-1 font-medium">Current (PowerHouse/Energy/Current)</label>
+              <label className="block text-slate-600 mb-1 font-medium">Current in mA (PowerHouse/Energy/Current)</label>
               <input
                 type="number"
                 step="0.1"
