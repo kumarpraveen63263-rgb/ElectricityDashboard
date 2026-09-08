@@ -342,8 +342,8 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
               eventHandlers={{ click: () => onSelect(asset) }}
             >
               <Tooltip direction="top" offset={[0, -20]} className="asset-tooltip">
-                <strong className={isLiveMqtt ? "text-emerald-400 font-bold" : ""}>
-                  {asset.id} {isLiveMqtt ? "🟢 (LIVE MQTT SENSOR)" : ""}
+                <strong className={isLiveMqtt ? "text-emerald-400 font-bold" : "text-slate-200"}>
+                  {asset.id} {isLiveMqtt ? "🟢 (LIVE MQTT SENSOR)" : "⚪ (SIMULATED NODE)"}
                 </strong>
                 <br />
                 {asset.name}
@@ -353,15 +353,19 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
               <Popup>
                 <div className="tangedco-popup-card">
                   <div className="card-head">
-                    <h4 className={isLiveMqtt ? "text-emerald-700 font-bold" : "text-amber-700 font-bold"}>{asset.id}</h4>
+                    <h4 className={isLiveMqtt ? "text-emerald-700 font-bold" : "text-slate-800 font-bold"}>{asset.id}</h4>
                     <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${isLiveMqtt ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-slate-100 text-slate-700 border border-slate-300"}`}>
-                      {isLiveMqtt ? "🟢 LIVE HARDWARE MQTT" : asset.state.toUpperCase()}
+                      {isLiveMqtt ? "🟢 LIVE HARDWARE MQTT" : "⚪ SIMULATED / UNCONNECTED"}
                     </span>
                   </div>
                   <strong className="text-xs text-slate-900 block mb-1 font-bold">{asset.name}</strong>
-                  {isLiveMqtt && (
+                  {isLiveMqtt ? (
                     <span className="text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded block mb-2 font-mono border border-emerald-300 font-bold">
-                      Supplying: S.A. Engineering College (SAEC)
+                      Supplying: S.A. Engineering College (SAEC) · ESP32 Live Stream
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded block mb-2 font-mono border border-slate-200 font-medium">
+                      Simulated Grid Node · No Hardware Sensor Attached
                     </span>
                   )}
                   <div className="kpi-grid">
@@ -407,7 +411,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
         >
           <Layers className="w-3.5 h-3.5 text-[#d7a445]" />
           <span className="font-mono text-xs font-bold text-[#d7a445] tracking-wider uppercase">GIS LEGEND</span>
-          <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/80 border border-emerald-500/30 px-1.5 py-0.5 rounded">LIVE 11kV</span>
+          <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/80 border border-emerald-500/30 px-1.5 py-0.5 rounded">1 LIVE / SIMULATED</span>
           <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-0.5" />
         </button>
       ) : (
@@ -420,7 +424,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
             <div className="flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-[#d7a445]" />
               <span>TANGEDCO GIS LEGEND</span>
-              <span className="text-[9px] text-emerald-400 font-mono">LIVE 11kV</span>
+              <span className="text-[9px] text-emerald-400 font-mono">1 LIVE MQTT</span>
             </div>
             <span className="text-slate-400 hover:text-white transition-colors">
               <ChevronUp className="w-3.5 h-3.5" />
@@ -429,19 +433,19 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
           <div className="legend-grid">
             <div className="legend-item">
               <div className="icon-box bg-[#00FF66] text-slate-950 font-bold">027</div>
-              <span>Selected Tx (AVD-TX-027 Neon)</span>
+              <span>Live Hardware MQTT Node (AVD-TX-027)</span>
             </div>
             <div className="legend-item">
               <div className="icon-box bg-[#2d8a74] text-white">●</div>
-              <span>Healthy Transformer</span>
+              <span>Simulated Transformer (Healthy)</span>
             </div>
             <div className="legend-item">
               <div className="icon-box bg-[#d18b18] text-white">●</div>
-              <span>Watch / High Load</span>
+              <span>Simulated Transformer (Watch)</span>
             </div>
             <div className="legend-item">
               <div className="icon-box bg-[#c34c38] text-white">▲</div>
-              <span>Fault Exception</span>
+              <span>Simulated Transformer (Fault)</span>
             </div>
             <div className="legend-item">
               <div className="icon-box bg-[#0f172a] text-[#c084fc] border border-purple-500">⚡</div>
@@ -453,11 +457,7 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
             </div>
             <div className="legend-item">
               <div className="icon-box bg-[#0f172a] text-[#60a5fa] border border-blue-500">🎓</div>
-              <span>Educational Inst. (SAEC)</span>
-            </div>
-            <div className="legend-item">
-              <div className="w-4 h-1 bg-[#00FF66] shadow-[0_0_6px_#00FF66]"></div>
-              <span>Animated 11kV Feeder Line</span>
+              <span>Educational Inst. (SAEC Campus)</span>
             </div>
           </div>
         </div>
