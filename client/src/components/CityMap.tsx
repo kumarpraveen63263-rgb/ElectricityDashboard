@@ -25,14 +25,6 @@ function createTransformerIcon(asset: Transformer, selected: boolean) {
           <div class="gis-neon-core ${selected ? "ring-4 ring-white" : ""}">
             027
           </div>
-          <div class="gis-permanent-label-badge">
-            <div class="title">
-              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00FF66;box-shadow:0 0 6px #00FF66"></span>
-              AVD-TX-027
-            </div>
-            <div class="sub">S.A. Engineering College</div>
-            <div class="mqtt-tag">🟢 LIVE MQTT SIGNAL</div>
-          </div>
         </div>
       `,
     });

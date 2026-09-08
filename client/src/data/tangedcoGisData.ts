@@ -48,7 +48,7 @@ export const collegeAsset: CollegeAsset = {
   id: "SAEC-AVD",
   name: "S.A. Engineering College (SAEC)",
   code: "SAEC-CAMPUS",
-  position: { lat: 13.0612, lng: 80.0988 },
+  position: { lat: 13.0608, lng: 80.1002 },
   connectedTx: "AVD-TX-027",
   category: "Higher Education Campus / High-Load Consumer",
   demandKva: "650 kVA Peak",
@@ -86,7 +86,7 @@ export const feederLines: FeederLine[] = [
       [13.0980, 80.0940],
       [13.0750, 80.0960],
       [13.0620, 80.0975], // AVD-TX-027 Transformer
-      [13.0612, 80.0988], // S.A. Engineering College
+      [13.0608, 80.1002], // S.A. Engineering College
     ],
   },
   {
