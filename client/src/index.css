@@ -325,30 +325,38 @@
   font-weight: 700;
 }
 
-/* Custom Leaflet Tooltips & Popups */
+/* Custom Leaflet Tooltips & Popups - Soft Half-White Warm Cream Theme */
 .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid #d7a445 !important;
+  background: #FDFCF8 !important;
+  color: #173B57 !important;
+  border: 1.5px solid #D7A445 !important;
   border-radius: 8px !important;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7) !important;
+  box-shadow: 0 12px 32px rgba(23, 59, 87, 0.22) !important;
   padding: 0 !important;
   overflow: hidden;
 }
 .leaflet-popup-tip {
-  background: #0f172a !important;
-  border: 1px solid #d7a445 !important;
+  background: #FDFCF8 !important;
+  border: 1.5px solid #D7A445 !important;
+}
+.leaflet-popup-close-button {
+  color: #64748B !important;
+  padding: 6px 8px 0 0 !important;
+}
+.leaflet-popup-close-button:hover {
+  color: #0F172A !important;
 }
 .tangedco-popup-card {
   padding: 14px;
-  min-width: 230px;
+  min-width: 240px;
   font-family: "Public Sans", sans-serif;
+  background: #FDFCF8;
 }
 .tangedco-popup-card .card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #E2E8F0;
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
@@ -357,30 +365,30 @@
   font-family: "DM Mono", monospace;
   font-size: 14px;
   font-weight: 700;
-  color: #00FF66;
 }
 .tangedco-popup-card .kpi-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .tangedco-popup-card .kpi-grid div {
-  background: rgba(255, 255, 255, 0.05);
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
   padding: 6px 8px;
   border-radius: 4px;
 }
 .tangedco-popup-card .kpi-grid label {
   display: block;
   font-size: 9px;
-  color: #94a3b8;
+  color: #475569;
+  font-weight: 600;
   text-transform: uppercase;
 }
-.tangedco-popup-card .kpi-grid value {
+.tangedco-popup-card .kpi-grid span {
   display: block;
   font-family: "DM Mono", monospace;
   font-size: 12px;
   font-weight: 700;
-  color: #e2e8f0;
 }
 

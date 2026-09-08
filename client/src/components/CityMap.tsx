@@ -211,28 +211,28 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
               <Popup>
                 <div className="tangedco-popup-card">
                   <div className="card-head">
-                    <h4 className="text-purple-400">{ss.id}</h4>
-                    <span className="text-[10px] bg-purple-950 text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded font-mono">
+                    <h4 className="text-purple-700 font-bold">{ss.id}</h4>
+                    <span className="text-[10px] bg-purple-100 text-purple-800 border border-purple-300 px-2 py-0.5 rounded font-mono font-bold">
                       SUBSTATION
                     </span>
                   </div>
-                  <strong className="text-xs text-white block mb-2">{ss.name}</strong>
+                  <strong className="text-xs text-slate-900 block mb-2 font-bold">{ss.name}</strong>
                   <div className="kpi-grid">
                     <div>
                       <label>Voltage Level</label>
-                      <span className="font-mono text-xs font-bold text-slate-200">{ss.voltage}</span>
+                      <span className="font-mono text-xs font-bold text-slate-800">{ss.voltage}</span>
                     </div>
                     <div>
                       <label>Health Status</label>
-                      <span className="font-mono text-xs font-bold text-emerald-400">{ss.health}</span>
+                      <span className="font-mono text-xs font-bold text-emerald-700">{ss.health}</span>
                     </div>
                     <div>
                       <label>Connected Feeders</label>
-                      <span className="font-mono text-xs font-bold text-slate-200">{ss.connectedFeeders} Feeders</span>
+                      <span className="font-mono text-xs font-bold text-slate-800">{ss.connectedFeeders} Feeders</span>
                     </div>
                     <div>
                       <label>Transformers</label>
-                      <span className="font-mono text-xs font-bold text-slate-200">{ss.connectedTransformers} Units</span>
+                      <span className="font-mono text-xs font-bold text-slate-800">{ss.connectedTransformers} Units</span>
                     </div>
                   </div>
                 </div>
@@ -253,30 +253,30 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
               <Popup>
                 <div className="tangedco-popup-card">
                   <div className="card-head">
-                    <h4 className="text-orange-400">{office.code}</h4>
-                    <span className="text-[10px] bg-orange-950 text-orange-300 border border-orange-500/40 px-2 py-0.5 rounded font-mono">
+                    <h4 className="text-orange-700 font-bold">{office.code}</h4>
+                    <span className="text-[10px] bg-orange-100 text-orange-800 border border-orange-300 px-2 py-0.5 rounded font-mono font-bold">
                       EB O&M OFFICE
                     </span>
                   </div>
-                  <strong className="text-xs text-white block mb-2">{office.name}</strong>
+                  <strong className="text-xs text-slate-900 block mb-2 font-bold">{office.name}</strong>
                   <div className="kpi-grid">
                     <div>
                       <label>Status</label>
-                      <span className="font-mono text-xs font-bold text-emerald-400">{office.status}</span>
+                      <span className="font-mono text-xs font-bold text-emerald-700">{office.status}</span>
                     </div>
                     <div>
                       <label>Assigned Engineers</label>
-                      <span className="font-mono text-xs font-bold text-slate-200">{office.engineers} Staff</span>
+                      <span className="font-mono text-xs font-bold text-slate-800">{office.engineers} Staff</span>
                     </div>
                     <div>
                       <label>Open Tickets</label>
-                      <span className={`font-mono text-xs font-bold ${office.openTickets ? "text-amber-400" : "text-slate-300"}`}>
+                      <span className={`font-mono text-xs font-bold ${office.openTickets ? "text-amber-700" : "text-slate-800"}`}>
                         {office.openTickets} Active
                       </span>
                     </div>
                     <div>
                       <label>Division</label>
-                      <span className="font-mono text-xs font-bold text-slate-200">{office.zoneId.toUpperCase()}</span>
+                      <span className="font-mono text-xs font-bold text-slate-800">{office.zoneId.toUpperCase()}</span>
                     </div>
                   </div>
                 </div>
@@ -295,29 +295,29 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
             <Popup>
               <div className="tangedco-popup-card">
                 <div className="card-head">
-                  <h4 className="text-sky-400">{collegeAsset.id}</h4>
-                  <span className="text-[10px] bg-sky-950 text-sky-300 border border-sky-500/40 px-2 py-0.5 rounded font-mono">
+                  <h4 className="text-sky-700 font-bold">{collegeAsset.id}</h4>
+                  <span className="text-[10px] bg-sky-100 text-sky-800 border border-sky-300 px-2 py-0.5 rounded font-mono font-bold">
                     EDUCATIONAL CAMPUS
                   </span>
                 </div>
-                <strong className="text-xs text-white block mb-1">{collegeAsset.name}</strong>
-                <p className="text-[10px] text-slate-400 mb-2">{collegeAsset.category}</p>
+                <strong className="text-xs text-slate-900 block mb-1 font-bold">{collegeAsset.name}</strong>
+                <p className="text-[10px] text-slate-600 mb-2 font-medium">{collegeAsset.category}</p>
                 <div className="kpi-grid">
                   <div>
                     <label>Fed By Transformer</label>
-                    <span className="font-mono text-xs font-bold text-emerald-400">AVD-TX-027</span>
+                    <span className="font-mono text-xs font-bold text-emerald-700">AVD-TX-027</span>
                   </div>
                   <div>
                     <label>Peak Demand</label>
-                    <span className="font-mono text-xs font-bold text-slate-200">{collegeAsset.demandKva}</span>
+                    <span className="font-mono text-xs font-bold text-slate-800">{collegeAsset.demandKva}</span>
                   </div>
                   <div>
                     <label>Supply Status</label>
-                    <span className="font-mono text-xs font-bold text-emerald-400">🟢 LIVE MQTT</span>
+                    <span className="font-mono text-xs font-bold text-emerald-700">🟢 LIVE MQTT</span>
                   </div>
                   <div>
                     <label>Feeder Type</label>
-                    <span className="font-mono text-xs font-bold text-slate-200">Dedicated 11kV</span>
+                    <span className="font-mono text-xs font-bold text-slate-800">Dedicated 11kV</span>
                   </div>
                 </div>
               </div>
@@ -353,41 +353,41 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
               <Popup>
                 <div className="tangedco-popup-card">
                   <div className="card-head">
-                    <h4 className={isLiveMqtt ? "text-[#00FF66]" : "text-amber-400"}>{asset.id}</h4>
-                    <span className="text-[10px] bg-slate-900 text-slate-200 border border-slate-700 px-2 py-0.5 rounded font-mono">
+                    <h4 className={isLiveMqtt ? "text-emerald-700 font-bold" : "text-amber-700 font-bold"}>{asset.id}</h4>
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${isLiveMqtt ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-slate-100 text-slate-700 border border-slate-300"}`}>
                       {isLiveMqtt ? "🟢 LIVE HARDWARE MQTT" : asset.state.toUpperCase()}
                     </span>
                   </div>
-                  <strong className="text-xs text-white block mb-1">{asset.name}</strong>
+                  <strong className="text-xs text-slate-900 block mb-1 font-bold">{asset.name}</strong>
                   {isLiveMqtt && (
-                    <span className="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded block mb-2 font-mono border border-emerald-500/30">
+                    <span className="text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded block mb-2 font-mono border border-emerald-300 font-bold">
                       Supplying: S.A. Engineering College (SAEC)
                     </span>
                   )}
                   <div className="kpi-grid">
                     <div>
                       <label>Voltage</label>
-                      <span className="font-mono text-xs font-bold text-sky-300">{currentVoltage}</span>
+                      <span className="font-mono text-xs font-bold text-sky-800">{currentVoltage}</span>
                     </div>
                     <div>
                       <label>Load %</label>
-                      <span className="font-mono text-xs font-bold text-amber-300">{currentLoad}</span>
+                      <span className="font-mono text-xs font-bold text-amber-800">{currentLoad}</span>
                     </div>
                     <div>
                       <label>Core Temp</label>
-                      <span className="font-mono text-xs font-bold text-rose-300">{currentTemp}</span>
+                      <span className="font-mono text-xs font-bold text-rose-800">{currentTemp}</span>
                     </div>
                     <div>
                       <label>Power Factor</label>
-                      <span className="font-mono text-xs font-bold text-emerald-300">{currentPf}</span>
+                      <span className="font-mono text-xs font-bold text-emerald-800">{currentPf}</span>
                     </div>
                     <div>
                       <label>Health Score</label>
-                      <span className="font-mono text-xs font-bold text-emerald-400">{asset.health}%</span>
+                      <span className="font-mono text-xs font-bold text-emerald-700">{asset.health}%</span>
                     </div>
                     <div>
                       <label>Last Packet</label>
-                      <span className="font-mono text-xs font-bold text-slate-300">{currentUpdate}</span>
+                      <span className="font-mono text-xs font-bold text-slate-700">{currentUpdate}</span>
                     </div>
                   </div>
                 </div>
