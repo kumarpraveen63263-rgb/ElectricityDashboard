@@ -85,7 +85,7 @@ export const feederLines: FeederLine[] = [
       [13.1215, 80.0935], // Avadi 110kV Substation
       [13.0980, 80.0940],
       [13.0750, 80.0960],
-      [13.0620, 80.0975], // AVD-TX-027 Transformer
+      [13.065278, 80.110556], // AVD-TX-027 Transformer (Lake Parivakkam)
       [13.0608, 80.1002], // S.A. Engineering College
     ],
   },
