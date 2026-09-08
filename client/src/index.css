@@ -161,46 +161,90 @@
   100% { transform: scale(2.2); opacity: 0; }
 }
 
-/* Infrastructure Node Icons */
+/* Infrastructure Node Icons - Sleek Building Badges */
 .gis-substation-node {
-  width: 32px;
-  height: 32px;
-  background: #0f172a;
-  border: 2px solid #a855f7;
-  border-radius: 6px;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid #a855f7;
+  border-radius: 8px;
   color: #c084fc;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(168, 85, 247, 0.5);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
+.gis-substation-node:hover {
+  transform: scale(1.12);
+  border-color: #d8b4fe;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.8);
+}
+
 .gis-eboffice-node {
-  width: 30px;
-  height: 30px;
-  background: #0f172a;
-  border: 2px solid #f97316;
-  border-radius: 50%;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid #f97316;
+  border-radius: 8px;
   color: #fb923c;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 12px rgba(249, 115, 22, 0.7);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(249, 115, 22, 0.5);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
+.gis-eboffice-node:hover {
+  transform: scale(1.12);
+  border-color: #ffedd5;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.8);
+}
+
 .gis-college-node {
-  width: 34px;
-  height: 34px;
-  background: #0f172a;
-  border: 2px solid #2563eb;
-  border-radius: 50%;
+  position: relative;
+  width: 38px;
+  height: 38px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid #2563eb;
+  border-radius: 8px;
   color: #60a5fa;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 16px rgba(37, 99, 235, 0.8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 14px rgba(37, 99, 235, 0.6);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
+.gis-college-node:hover {
+  transform: scale(1.12);
+  border-color: #93c5fd;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.85);
+}
+
+.node-tag {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 3.5px;
+  border-radius: 3px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.ss-tag { background: #581c87; color: #e9d5ff; border: 1px solid #a855f7; }
+.eb-tag { background: #7c2d12; color: #ffedd5; border: 1px solid #f97316; }
+.edu-tag { background: #1e3a8a; color: #dbeafe; border: 1px solid #3b82f6; }
 
 /* Floating Control Room Legend Overlay & Toggle */
 .tangedco-gis-legend-toggle {

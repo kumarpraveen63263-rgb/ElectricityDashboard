@@ -38,51 +38,64 @@ function createTransformerIcon(asset: Transformer, selected: boolean) {
   });
 }
 
-// 2. Substation Marker Generator (Purple Electrical Grid Tower)
+// 2. Substation Marker Generator (Purple Electrical Grid Power Facility Building)
 function createSubstationIcon() {
-  return L.divIcon({
-    className: "gis-marker-wrapper",
-    iconSize: [34, 34],
-    iconAnchor: [17, 17],
-    html: `
-      <div class="gis-substation-node">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2v20M17 5H7M19 12H5M16 19H8"/>
-        </svg>
-      </div>
-    `,
-  });
-}
-
-// 3. EB Office Marker Generator (Orange Government Building)
-function createEbOfficeIcon() {
-  return L.divIcon({
-    className: "gis-marker-wrapper",
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-    html: `
-      <div class="gis-eboffice-node">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
-          <path d="M9 22v-4h6v4M8 6h2M14 6h2M8 11h2M14 11h2M8 16h2M14 16h2"/>
-        </svg>
-      </div>
-    `,
-  });
-}
-
-// 4. S.A. Engineering College Marker Generator (Blue Graduation Cap)
-function createCollegeIcon() {
   return L.divIcon({
     className: "gis-marker-wrapper",
     iconSize: [36, 36],
     iconAnchor: [18, 18],
     html: `
-      <div class="gis-college-node">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      <div class="gis-substation-node" title="110/33kV Substation">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 20h20" stroke="#c084fc" stroke-width="2"/>
+          <rect x="4" y="11" width="16" height="9" rx="1" fill="rgba(168, 85, 247, 0.18)" stroke="#a855f7"/>
+          <path d="M12 2v9M8 5h8M9 8h6" stroke="#c084fc"/>
+          <path d="M7 15h3M14 15h3" stroke="#a855f7"/>
+          <circle cx="8.5" cy="15" r="1" fill="#c084fc"/>
+          <circle cx="15.5" cy="15" r="1" fill="#c084fc"/>
         </svg>
+        <span class="node-tag ss-tag">SS</span>
+      </div>
+    `,
+  });
+}
+
+// 3. EB Office Marker Generator (Orange TANGEDCO Government Office Building)
+function createEbOfficeIcon() {
+  return L.divIcon({
+    className: "gis-marker-wrapper",
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    html: `
+      <div class="gis-eboffice-node" title="TANGEDCO EB O&M Office">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18" stroke="#fb923c" stroke-width="2"/>
+          <path d="M5 21V7l7-4 7 4v14" fill="rgba(251, 146, 60, 0.15)" stroke="#fb923c"/>
+          <rect x="7" y="9" width="2.5" height="2.5" rx="0.5" fill="#fb923c" stroke="none"/>
+          <rect x="14.5" y="9" width="2.5" height="2.5" rx="0.5" fill="#fb923c" stroke="none"/>
+          <rect x="7" y="13" width="2.5" height="2.5" rx="0.5" fill="#fb923c" stroke="none"/>
+          <rect x="14.5" y="13" width="2.5" height="2.5" rx="0.5" fill="#fb923c" stroke="none"/>
+          <rect x="10.5" y="16" width="3" height="5" rx="0.5" fill="#f97316" stroke="none"/>
+        </svg>
+        <span class="node-tag eb-tag">EB</span>
+      </div>
+    `,
+  });
+}
+
+// 4. S.A. Engineering College Marker Generator (Blue Academic Building)
+function createCollegeIcon() {
+  return L.divIcon({
+    className: "gis-marker-wrapper",
+    iconSize: [38, 38],
+    iconAnchor: [19, 19],
+    html: `
+      <div class="gis-college-node" title="S.A. Engineering College Campus">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="#60a5fa"/>
+          <path d="M6 12v5c3 3 9 3 12 0v-5" stroke="#3b82f6" fill="rgba(59, 130, 246, 0.2)"/>
+        </svg>
+        <span class="node-tag edu-tag">SAEC</span>
       </div>
     `,
   });
