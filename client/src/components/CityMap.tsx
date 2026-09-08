@@ -177,31 +177,26 @@ export default function CityMap({ cityId = "chennai", zoneId, selectedId, onSele
           />
         ))}
 
-        {/* Radar Sweep Circle Overlay centered at AVD-TX-027 */}
-        <Circle
-          center={[13.0620, 80.0975]}
-          radius={500}
-          pathOptions={{ color: "#00FF66", weight: 1.5, dashArray: "4 4", fillColor: "#00FF66", fillOpacity: 0.08 }}
-        />
-
-        {/* Animated Power-Flow Feeder Lines */}
-        {feederLines.map((feeder) => (
-          <Polyline
-            key={feeder.id}
-            positions={feeder.path}
-            pathOptions={{
-              color: feeder.color,
-              weight: feeder.status === "live_mqtt" ? 4 : 3,
-              className: `gis-feeder-line ${feeder.status}`,
-            }}
-          >
-            <Tooltip sticky direction="top" className="asset-tooltip">
-              <strong>{feeder.name}</strong>
-              <br />
-              Status: {feeder.status.toUpperCase()}
-            </Tooltip>
-          </Polyline>
-        ))}
+        {/* Feeder Lines (excluding green feeder lines per requirement) */}
+        {feederLines
+          .filter((feeder) => feeder.color !== "#00FF66" && feeder.status !== "live_mqtt")
+          .map((feeder) => (
+            <Polyline
+              key={feeder.id}
+              positions={feeder.path}
+              pathOptions={{
+                color: feeder.color,
+                weight: 3,
+                className: `gis-feeder-line ${feeder.status}`,
+              }}
+            >
+              <Tooltip sticky direction="top" className="asset-tooltip">
+                <strong>{feeder.name}</strong>
+                <br />
+                Status: {feeder.status.toUpperCase()}
+              </Tooltip>
+            </Polyline>
+          ))}
 
         {/* TANTRANSCO / TANGEDCO Substations (Purple Markers) */}
         {substations
